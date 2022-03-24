@@ -27,9 +27,9 @@ fetch(`https://www.reddit.com/r/todayilearned/new.json`)
   .then(async (realData) => {
     const realFacts = realData.data.children;
     const facts = [];
-    facts.push(trimTIL(realFacts[0].data.title));
-    facts.push(trimTIL(realFacts[1].data.title));
-    facts.push(trimTIL(realFacts[2].data.title));
+    facts.push(formatFact(trimTIL(realFacts[0].data.title)));
+    facts.push(formatFact(trimTIL(realFacts[1].data.title)));
+    facts.push(formatFact(trimTIL(realFacts[2].data.title)));
 
     let fakeFact = process.env.FAKE_FACT_OVERRIDE;
     if (!fakeFact) {
@@ -41,7 +41,7 @@ fetch(`https://www.reddit.com/r/todayilearned/new.json`)
       fakeFact = fakeData.data.children[fakeFactApiSkip].data.title;
     }
 
-    facts.push(fakeFact);
+    facts.push(formatFact(fakeFact));
 
     for (var j, i = facts.length - 1; i > 0; i--) {
       j = Math.floor(Math.random() * (i + 1));
@@ -62,12 +62,18 @@ fetch(`https://www.reddit.com/r/todayilearned/new.json`)
   });
 
 function trimTIL(fact) {
+  fact = fact.replace("Today I Learned: that ", "");
+  fact = fact.replace("Today I Learned:", "");
   fact = fact.replace("TIL: that ", "");
   fact = fact.replace("TIL: ", "");
   fact = fact.replace("TIL that ", "");
   fact = fact.replace("TIL ", "");
-  fact = fact.charAt(0).toUpperCase() + fact.slice(1);
   return fact;
+}
+
+function formatFact(fact) {
+  fact = fact.charAt(0).toUpperCase() + fact.slice(1);
+  return fact.replace(/\b(?=\s*$)/gm, ".");
 }
 
 async function wordOfTheDay() {
