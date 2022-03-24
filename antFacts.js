@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import cheerio from "cheerio";
-
+import dotenv from "dotenv";
+dotenv.config();
 const date = new Date();
 const weekday = [
   "Sunday",
@@ -28,9 +29,16 @@ fetch("https://www.reddit.com/r/todayilearned/new.json")
     facts.push(trimTIL(realFacts[1].data.title));
     facts.push(trimTIL(realFacts[2].data.title));
 
-    const response = await fetch("https://www.reddit.com/r/FakeFacts/new.json");
-    const fakeData = await response.json();
-    const fakeFact = fakeData.data.children[0].data.title;
+    let fakeFact = process.env.FAKE_FACT_OVERRIDE;
+    if (!fakeFact) {
+      const response = await fetch(
+        "https://www.reddit.com/r/FakeFacts/new.json"
+      );
+      const fakeData = await response.json();
+      let fakeFactApiSkip = process.env.FAKE_FACT_TAKE;
+      fakeFact = fakeData.data.children[fakeFactApiSkip].data.title;
+    }
+
     facts.push(fakeFact);
 
     for (var j, i = facts.length - 1; i > 0; i--) {
