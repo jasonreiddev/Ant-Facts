@@ -1,5 +1,8 @@
 import fetch from "node-fetch";
 
+await onThisDay();
+
+// Facts
 fetch("https://www.reddit.com/r/todayilearned/new.json")
   .then((response) => response.json())
   .then(async (realData) => {
@@ -37,4 +40,15 @@ function trimTIL(fact) {
   fact = fact.replace("TIL ", "");
   fact = fact.charAt(0).toUpperCase() + fact.slice(1);
   return fact;
+}
+
+async function onThisDay() {
+  const date = new Date();
+  const response = await fetch(
+    `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${date.getMonth()}/${date.getDate()}`
+  );
+  const onThisDayData = await response.json();
+  console.log(
+    `On this day in History in ${onThisDayData.selected[0].year}, ${onThisDayData.selected[0].text}`
+  );
 }
