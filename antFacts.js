@@ -2,16 +2,17 @@ import fetch from "node-fetch";
 
 fetch("https://www.reddit.com/r/todayilearned/new.json")
   .then((response) => response.json())
-  .then(async (fakeData) => {
-    const fakeFacts = fakeData.data.children;
+  .then(async (realData) => {
+    const realFacts = realData.data.children;
     const facts = [];
-    facts.push(trimTIL(fakeFacts[0].data.title));
-    facts.push(trimTIL(fakeFacts[1].data.title));
-    facts.push(trimTIL(fakeFacts[2].data.title));
+    facts.push(trimTIL(realFacts[0].data.title));
+    facts.push(trimTIL(realFacts[1].data.title));
+    facts.push(trimTIL(realFacts[2].data.title));
 
     const response = await fetch("https://www.reddit.com/r/FakeFacts/new.json");
-    const realData = await response.json();
-    facts.push(realData.data.children[0].data.title);
+    const fakeData = await response.json();
+    const fakeFact = fakeData.data.children[0].data.title;
+    facts.push(fakeFact);
 
     for (var j, i = facts.length - 1; i > 0; i--) {
       j = Math.floor(Math.random() * (i + 1));
@@ -22,6 +23,11 @@ fetch("https://www.reddit.com/r/todayilearned/new.json")
     facts.forEach((fact, index) => {
       console.log(`${index + 1}. ${fact}`);
     });
+    console.log("Spot the false fact!");
+
+    console.warn(
+      `The fake fact is: ${facts.findIndex((rank) => rank === fakeFact) + 1}`
+    );
   });
 
 function trimTIL(fact) {

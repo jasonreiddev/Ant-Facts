@@ -2,4 +2,6 @@ Ant Facts
 
 Install packages with `Yarn`
 
-Run with `node antFacts.js`
+Start with `Yarn Start`
+
+Make sure you don't accidentally reveal the fake fact when you copy the comment!
