@@ -1,6 +1,22 @@
 import fetch from "node-fetch";
+import cheerio from "cheerio";
 
-await onThisDay();
+const date = new Date();
+const weekday = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+console.log(`Happy ${weekday[date.getDay()]}!`);
+
+await onThisDay(date);
+
+await wordOfTheDay(date);
 
 // Facts
 fetch("https://www.reddit.com/r/todayilearned/new.json")
@@ -42,8 +58,23 @@ function trimTIL(fact) {
   return fact;
 }
 
+async function wordOfTheDay() {
+  var html = await fetch(
+    "https://www.merriam-webster.com/word-of-the-day/2022-03-23"
+  ).then(function (res) {
+    return res.text();
+  });
+  var $ = cheerio.load(html);
+
+  const word = $(
+    ".article-header-container.wod-article-header .word-header h1"
+  ).text();
+  const meaning = $(".wod-definition-container > p:nth-child(2)").text();
+
+  console.log(`Todays word of the day is ${word}! ${meaning}`);
+}
+
 async function onThisDay() {
-  const date = new Date();
   const response = await fetch(
     `https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/all/${date.getMonth()}/${date.getDate()}`
   );
