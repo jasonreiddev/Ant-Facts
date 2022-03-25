@@ -1,12 +1,15 @@
 {
-  "name": "AntFacts",
+  "name": "ant-facts",
   "version": "1.0.0",
   "main": "index.js",
   "license": "BSD-2-Clause",
   "type": "module",
+  "scripts": {
+    "start": "node antFacts.js"
+  },
   "dependencies": {
-    "@slack/events-api": "^3.0.1",
-    "@slack/web-api": "^6.7.0",
+    "cheerio": "^1.0.0-rc.10",
+    "dotenv": "^16.0.0",
     "node-fetch": "^3.2.3"
   }
 }
