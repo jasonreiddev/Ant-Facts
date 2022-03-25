@@ -27,9 +27,9 @@ fetch(`https://www.reddit.com/r/todayilearned/new.json`)
   .then(async (realData) => {
     const realFacts = realData.data.children;
     const facts = [];
-    facts.push(formatFact(trimTIL(realFacts[0].data.title)));
-    facts.push(formatFact(trimTIL(realFacts[1].data.title)));
-    facts.push(formatFact(trimTIL(realFacts[2].data.title)));
+    facts.push(formatFact(trimTIL(realFacts[3].data.title)));
+    facts.push(formatFact(trimTIL(realFacts[4].data.title)));
+    facts.push(formatFact(trimTIL(realFacts[5].data.title)));
 
     let fakeFact = process.env.FAKE_FACT_OVERRIDE;
     if (!fakeFact) {
@@ -78,7 +78,7 @@ function formatFact(fact) {
 
 async function wordOfTheDay() {
   var html = await fetch(
-    "https://www.merriam-webster.com/word-of-the-day/2022-03-23"
+    "https://www.merriam-webster.com/word-of-the-day/"
   ).then(function (res) {
     return res.text();
   });
